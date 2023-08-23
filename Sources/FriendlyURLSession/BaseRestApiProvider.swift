@@ -19,7 +19,7 @@ open class BaseRestApiProvider {
     internal let urlSession = URLSession.shared
     internal var task: URLSessionTask?
     
-    init(shouldPrintLog: Bool = false, shouldCancelTask: Bool = false) {
+    public init(shouldPrintLog: Bool = false, shouldCancelTask: Bool = false) {
         self.shouldPrintLog = shouldPrintLog
         self.shouldCancelTask = false
     }
