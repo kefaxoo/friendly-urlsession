@@ -10,4 +10,5 @@ import Foundation
 public enum Response {
     case success(response: Success)
     case failure(response: Failure)
+    case none
 }

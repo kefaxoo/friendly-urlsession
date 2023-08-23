@@ -8,10 +8,20 @@
 import Foundation
 
 open class BaseRestApiProvider {
-    private var shouldPrintLog: Bool
+    open var shouldPrintLog: Bool {
+        didSet {
+            self.urlSession.shouldPrintLog = self.shouldPrintLog
+        }
+    }
     
-    init(shouldPrintLog: Bool = false) {
+    open var shouldCancelTask: Bool
+    
+    internal let urlSession = URLSession.shared
+    internal var task: URLSessionTask?
+    
+    init(shouldPrintLog: Bool = false, shouldCancelTask: Bool = false) {
         self.shouldPrintLog = shouldPrintLog
+        self.shouldCancelTask = false
     }
 }
 

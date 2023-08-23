@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Headers {
+internal extension Headers {
     var getHeaders: String {
         var headers = ""
         self.forEach { header, value in
@@ -18,7 +18,7 @@ extension Headers {
     }
 }
 
-extension [AnyHashable: Any] {
+internal extension [AnyHashable: Any] {
     var getHeaders: String {
         var headers = ""
         self.forEach { header, value in

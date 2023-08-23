@@ -16,7 +16,7 @@ public protocol BaseRestApiProtocol {
     var body: JSON? { get }
 }
 
-extension BaseRestApiProtocol {
+public extension BaseRestApiProtocol {
     var body: JSON? {
         get { return nil }
     }

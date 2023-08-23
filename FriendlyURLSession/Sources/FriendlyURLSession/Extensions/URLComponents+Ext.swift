@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URLComponents {
+internal extension URLComponents {
     mutating func addParameters(parameters: Parameters?, decodeToHttp: Bool) {
         guard let parameters else { return }
         

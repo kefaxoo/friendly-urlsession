@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension JSON {
+internal extension JSON {
     var data: Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
     }

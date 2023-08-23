@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Error {
+internal extension Error {
     var getErrorLine: String {
         return "ERROR: \(self.localizedDescription)"
     }

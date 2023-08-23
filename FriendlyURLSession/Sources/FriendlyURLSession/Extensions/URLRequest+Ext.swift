@@ -8,12 +8,12 @@
 import Foundation
 
 extension URLRequest {
-    fileprivate init(url: URL, method: HTTPMethod) {
+    public init(url: URL, method: HTTPMethod) {
         self.init(url: url)
         self.httpMethod = method.rawValue
     }
     
-    init?(type requestType: BaseRestApiEnum, decodeToHttp: Bool = false, shouldPrintLog: Bool = false) {
+    public init?(type requestType: BaseRestApiEnum, decodeToHttp: Bool = false, shouldPrintLog: Bool = false) {
         var urlComponents = URLComponents(string: requestType.baseUrl + requestType.path)
         urlComponents?.addParameters(parameters: requestType.parameters, decodeToHttp: decodeToHttp)
         
@@ -32,7 +32,11 @@ extension URLRequest {
         headers?.forEach({ self.addValue($0.value, forHTTPHeaderField: $0.key) })
     }
     
-    func curl(pretty: Bool = false) -> String {
+    public var curl: String {
+        return self.makeCurl()
+    }
+    
+    internal func makeCurl(pretty: Bool = true) -> String {
         let newLine = pretty ? "\\\n" : ""
         let method = (pretty ? "--request " : "-X ") + "\(self.httpMethod ?? "GET") \(newLine)"
         let url = (pretty ? "--url " : "") + "\'\(self.url?.absoluteString ?? "")\' \(newLine)"

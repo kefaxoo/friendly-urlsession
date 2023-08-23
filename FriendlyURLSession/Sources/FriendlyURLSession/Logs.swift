@@ -8,12 +8,12 @@
 import Foundation
 
 class Logs {
-    static let shared = Logs()
+    public static let shared = Logs()
     
     fileprivate init() {}
     
     /// Request log
-    func log(request: URLRequest) {
+    internal func log(request: URLRequest) {
         let urlString = request.url?.absoluteString ?? ""
         let components = URLComponents(string: urlString)
         
@@ -28,13 +28,13 @@ class Logs {
         requestLog += "Host: \(host)\n"
         requestLog += request.allHTTPHeaderFields?.getHeaders ?? ""
         requestLog += request.httpBody?.getBody ?? ""
-        requestLog += "cURL: \n\(request.curl(pretty: true))"
+        requestLog += "cURL: \n\(request.curl)"
         requestLog += "\n------------------->\n"
         print(requestLog)
     }
     
     /// Response log
-    func log(data: Data?, response: URLResponse?, error: Error?) {
+    internal func log(data: Data?, response: URLResponse?, error: Error?) {
         let urlString = response?.url?.absoluteString ?? ""
         let components = URLComponents(string: urlString)
         
