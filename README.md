@@ -1,1 +1,3 @@
-# friendly-urlsession
+# FriendlyURLSession
+
+A description of this package.
