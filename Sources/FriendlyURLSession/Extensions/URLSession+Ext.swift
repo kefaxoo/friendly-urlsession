@@ -26,7 +26,7 @@ public extension URLSession {
     
     func returnDataTask(with request: URLRequest?, response: @escaping((Response) -> ())) -> URLSessionTask? {
         guard let request else {
-            response(.none)
+            response(.failure(response: Failure(data: nil, error: nil, statusCode: -1)))
             return nil
         }
         
@@ -44,7 +44,7 @@ public extension URLSession {
                 } else {
                     if let error,
                        error.localizedDescription.lowercased() == "cancelled" {
-                        response(.none)
+                        response(.failure(response: Failure(data: nil, error: nil, statusCode: -1)))
                         return
                     }
                     

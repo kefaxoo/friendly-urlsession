@@ -8,6 +8,6 @@
 import Foundation
 
 public struct Success {
-    let data: Data?
-    let statusCode: Int
+    public let data: Data?
+    public let statusCode: Int
 }

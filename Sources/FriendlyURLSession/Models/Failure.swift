@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Failure {
-    let data: Data?
-    let error: Error?
-    let statusCode: Int
+    public let data: Data?
+    public let error: Error?
+    public let statusCode: Int
 }
