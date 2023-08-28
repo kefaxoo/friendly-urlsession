@@ -14,7 +14,7 @@ internal extension Data {
 }
 
 public extension Data {
-    func map<T: Decodable>(from data: Data?, to type: T.Type) -> T? {
+    func map<T: Decodable>(to type: T.Type) -> T? {
         return try? JSONDecoder().decode(type, from: self)
     }
 }
