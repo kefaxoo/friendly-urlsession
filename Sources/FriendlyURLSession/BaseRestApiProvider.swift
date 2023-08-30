@@ -21,7 +21,8 @@ open class BaseRestApiProvider {
     
     public init(shouldPrintLog: Bool = false, shouldCancelTask: Bool = false) {
         self.shouldPrintLog = shouldPrintLog
-        self.shouldCancelTask = false
+        self.urlSession.shouldPrintLog = shouldPrintLog
+        self.shouldCancelTask = shouldCancelTask
     }
 }
 
