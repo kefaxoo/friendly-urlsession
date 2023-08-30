@@ -54,9 +54,9 @@ class Logs {
         }
         
         responseLog += (response as? HTTPURLResponse)?.allHeaderFields.getHeaders ?? ""
-        responseLog = data?.getBody ?? ""
-        responseLog = error?.getErrorLine ?? ""
-        responseLog = "\n<-------------------\n"
+        responseLog += data?.getBody ?? ""
+        responseLog += error?.getErrorLine ?? ""
+        responseLog += "\n<-------------------\n"
         print(responseLog)
     }
 }
