@@ -11,4 +11,8 @@ internal extension JSON {
     var data: Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
     }
+    
+    var nsData: NSData? {
+        return self.data as? NSData
+    }
 }

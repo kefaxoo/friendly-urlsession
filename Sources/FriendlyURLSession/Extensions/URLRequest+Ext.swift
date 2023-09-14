@@ -21,7 +21,11 @@ extension URLRequest {
         
         self.init(url: url, method: requestType.method)
         self.addHeaders(headers: requestType.headers)
-        self.httpBody = requestType.body?.data
+        if let body = requestType.body?.nsData {
+            self.setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
+            self.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            self.httpBody = body as Data
+        }
         
         if shouldPrintLog {
             Logs.shared.log(request: self)
