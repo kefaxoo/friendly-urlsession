@@ -56,4 +56,29 @@ public extension URLSession {
         task.resume()
         return task
     }
+    
+    @available(macOS, introduced: 12.0)
+    func dataTask(with request: URLRequest?) async throws -> Response {
+        guard let request else { return .failure(response: Failure(data: nil, error: nil, statusCode: -1)) }
+        
+        do {
+            let (data, response) = try await self.data(for: request)
+            if shouldPrintLog {
+                Logs.shared.log(data: data, response: response, error: nil)
+            }
+            
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+            return (statusCode >= 200 && statusCode < 300 ? .success(response: Success(data: data, statusCode: statusCode)) : .failure(response: Failure(data: data, error: nil, statusCode: statusCode)))
+        } catch {
+            if shouldPrintLog {
+                Logs.shared.log(data: nil, response: nil, error: error)
+            }
+            
+            if error.localizedDescription.lowercased() == "cancelled" {
+                return .failure(response: Failure(data: nil, error: nil, statusCode: -1))
+            }
+            
+            return .failure(response: Failure(data: nil, error: error, statusCode: 1000))
+        }
+    }
 }
