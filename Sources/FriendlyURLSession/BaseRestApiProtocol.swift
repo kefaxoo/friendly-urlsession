@@ -14,10 +14,15 @@ public protocol BaseRestApiProtocol {
     var headers: Headers? { get }
     var parameters: Parameters? { get }
     var body: JSON? { get }
+    var bodyType: BodyType? { get }
 }
 
 public extension BaseRestApiProtocol {
     var body: JSON? {
         get { return nil }
+    }
+    
+    var bodyType: BodyType? {
+        return nil
     }
 }

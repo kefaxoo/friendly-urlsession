@@ -23,7 +23,12 @@ extension URLRequest {
         self.addHeaders(headers: requestType.headers)
         if let body = requestType.body?.nsData {
             self.setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
-            self.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            if let contentTypeHeader = requestType.bodyType?.contentTypeHeader {
+                self.setValue(contentTypeHeader, forHTTPHeaderField: "Content-Type")
+            } else {
+                self.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            }
+            
             self.httpBody = body as Data
         }
         
