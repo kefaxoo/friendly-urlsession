@@ -21,15 +21,28 @@ extension URLRequest {
         
         self.init(url: url, method: requestType.method)
         self.addHeaders(headers: requestType.headers)
-        if let body = requestType.body?.nsData {
-            self.setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
-            if let contentTypeHeader = requestType.bodyType?.contentTypeHeader {
-                self.setValue(contentTypeHeader, forHTTPHeaderField: "Content-Type")
+        if let body = requestType.body {
+            if let bodyType = requestType.bodyType {
+                switch bodyType {
+                    case .urlEncoded:
+                        self.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+                        var components = URLComponents()
+                        components.queryItems = body.map({ URLQueryItem(name: $0.key, value: "\($0.value)") })
+                        self.httpBody = components.query?.data(using: .utf8)
+                    default:
+                        guard let body = body.nsData else { break }
+                        
+                        self.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        self.setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
+                        self.httpBody = body as Data
+                }
             } else {
-                self.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                if let body = body.nsData {
+                    self.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    self.setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
+                    self.httpBody = body as Data
+                }
             }
-            
-            self.httpBody = body as Data
         }
         
         if shouldPrintLog {
