@@ -11,4 +11,5 @@ public struct Failure {
     public let data: Data?
     public let error: Error?
     public let statusCode: Int
+    public let cURL: String?
 }

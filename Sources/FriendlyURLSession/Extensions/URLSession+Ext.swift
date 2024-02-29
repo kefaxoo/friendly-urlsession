@@ -26,7 +26,7 @@ public extension URLSession {
     
     func returnDataTask(with request: URLRequest?, response: @escaping((Response) -> ())) -> URLSessionTask? {
         guard let request else {
-            response(.failure(response: Failure(data: nil, error: nil, statusCode: -1)))
+            response(.failure(response: Failure(data: nil, error: nil, statusCode: -1, cURL: request?.curl)))
             return nil
         }
         
@@ -40,15 +40,15 @@ public extension URLSession {
             
             DispatchQueue.main.async {
                 if statusCode >= 200, statusCode < 300 {
-                    response(.success(response: Success(data: data, statusCode: statusCode)))
+                    response(.success(response: Success(data: data, statusCode: statusCode, cURL: request.curl)))
                 } else {
                     if let error,
                        error.localizedDescription.lowercased() == "cancelled" {
-                        response(.failure(response: Failure(data: nil, error: nil, statusCode: -1)))
+                        response(.failure(response: Failure(data: nil, error: nil, statusCode: -1, cURL: request.curl)))
                         return
                     }
                     
-                    response(.failure(response: Failure(data: data, error: error, statusCode: statusCode)))
+                    response(.failure(response: Failure(data: data, error: error, statusCode: statusCode, cURL: request.curl)))
                 }
             }
         }
@@ -59,7 +59,7 @@ public extension URLSession {
     
     @available(macOS, introduced: 12.0)
     func dataTask(with request: URLRequest?) async throws -> Response {
-        guard let request else { return .failure(response: Failure(data: nil, error: nil, statusCode: -1)) }
+        guard let request else { return .failure(response: Failure(data: nil, error: nil, statusCode: -1, cURL: request?.curl)) }
         
         do {
             let (data, response) = try await self.data(for: request)
@@ -68,17 +68,17 @@ public extension URLSession {
             }
             
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
-            return (statusCode >= 200 && statusCode < 300 ? .success(response: Success(data: data, statusCode: statusCode)) : .failure(response: Failure(data: data, error: nil, statusCode: statusCode)))
+            return (statusCode >= 200 && statusCode < 300 ? .success(response: Success(data: data, statusCode: statusCode)) : .failure(response: Failure(data: data, error: nil, statusCode: statusCode, cURL: request.curl)))
         } catch {
             if shouldPrintLog {
                 Logs.shared.log(data: nil, response: nil, error: error)
             }
             
             if error.localizedDescription.lowercased() == "cancelled" {
-                return .failure(response: Failure(data: nil, error: nil, statusCode: -1))
+                return .failure(response: Failure(data: nil, error: nil, statusCode: -1, cURL: request.curl))
             }
             
-            return .failure(response: Failure(data: nil, error: error, statusCode: 1000))
+            return .failure(response: Failure(data: nil, error: error, statusCode: 1000, cURL: request.curl))
         }
     }
 }

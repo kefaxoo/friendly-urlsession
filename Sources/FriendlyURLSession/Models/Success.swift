@@ -10,4 +10,5 @@ import Foundation
 public struct Success {
     public let data: Data?
     public let statusCode: Int
+    public let cURL: String?
 }
