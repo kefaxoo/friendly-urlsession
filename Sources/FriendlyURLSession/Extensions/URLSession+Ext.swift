@@ -68,7 +68,7 @@ public extension URLSession {
             }
             
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
-            return (statusCode >= 200 && statusCode < 300 ? .success(response: Success(data: data, statusCode: statusCode)) : .failure(response: Failure(data: data, error: nil, statusCode: statusCode, cURL: request.curl)))
+            return (statusCode >= 200 && statusCode < 300 ? .success(response: Success(data: data, statusCode: statusCode, cURL: request.curl)) : .failure(response: Failure(data: data, error: nil, statusCode: statusCode, cURL: request.curl)))
         } catch {
             if shouldPrintLog {
                 Logs.shared.log(data: nil, response: nil, error: error)
