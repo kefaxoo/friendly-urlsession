@@ -56,46 +56,6 @@ public extension URLSession {
         return task
     }
     
-    @discardableResult func dataTask(with request: URLRequest?, progressClosure: ProgressClosure? = nil, response: @escaping ResponseCompletion) -> URLSessionDataTask? {
-        guard let request else {
-            response(.failure(response: Failure(data: nil, error: nil, statusCode: -1, cURL: request?.curl)))
-            return nil
-        }
-        
-        var progressObservation: NSKeyValueObservation?
-        
-        let task = self.dataTask(with: request) { [weak self] data, urlResponse, error in
-            if let shouldPrintLog = self?.shouldPrintLog,
-               shouldPrintLog {
-                Logs.shared.log(data: data, response: urlResponse, error: error)
-            }
-            
-            let statusCode = (urlResponse as? HTTPURLResponse)?.statusCode ?? -1
-            
-            progressObservation?.invalidate()
-            DispatchQueue.main.async {
-                if statusCode >= 200, statusCode < 300 {
-                    response(.success(response: Success(data: data, statusCode: statusCode, cURL: request.curl)))
-                } else {
-                    if let error,
-                       error.localizedDescription.lowercased() == "cancelled" {
-                        response(.failure(response: Failure(data: nil, error: nil, statusCode: -1, cURL: request.curl)))
-                        return
-                    }
-                    
-                    response(.failure(response: Failure(data: data, error: error, statusCode: statusCode, cURL: request.curl)))
-                }
-            }
-        }
-        
-        progressObservation = task.progress.observe(\.fractionCompleted) { progress, _ in
-            progressClosure?(Float(progress.fractionCompleted))
-        }
-        
-        task.resume()
-        return task
-    }
-    
     @available(*, deprecated, renamed: "dataTask(with:response:)")
     func returnDataTask(with request: URLRequest?, response: @escaping((Response) -> ())) -> URLSessionTask? { return nil }
     
