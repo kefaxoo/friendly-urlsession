@@ -56,6 +56,10 @@ public extension URLSession {
         return task
     }
     
+    @discardableResult func dataTask(withRequest request: BaseRestApiEnum, decodeToHttp: Bool = false, response: @escaping ResponseCompletion) -> URLSessionTask? {
+        return self.dataTask(with: URLRequest(type: request, decodeToHttp: decodeToHttp, shouldPrintLog: self.shouldPrintLog), response: response)
+    }
+    
     @available(*, deprecated, renamed: "dataTask(with:response:)")
     func returnDataTask(with request: URLRequest?, response: @escaping((Response) -> ())) -> URLSessionTask? { return nil }
     
